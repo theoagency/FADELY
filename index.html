@@ -349,7 +349,7 @@
                     <button @click="dashboardTab = 'billing'" class="px-5 py-2.5 rounded-xl font-bold text-sm transition" :class="dashboardTab === 'billing' ? 'bg-primary text-white shadow' : 'bg-gray-100 dark:bg-gray-800 text-gray-600'">💳 Abonnement & Stripe</button>
                 </div>
 
-                <!-- ONGLET 1 : AGENDA -->
+                <!-- ONGLET 1 : AGENDA DYNAMIQUE -->
                 <div x-show="dashboardTab === 'agenda'" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <!-- Formulaire de réservation rapide -->
                     <div id="booking-form-box" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow border space-y-4 h-fit">
@@ -388,56 +388,71 @@
                         </form>
                     </div>
 
-                    <!-- Liste des créneaux horaires interactifs -->
+                    <!-- Liste des créneaux horaires selon la date -->
                     <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow border space-y-6">
                         <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl gap-4">
                             <div class="flex items-center space-x-3">
-                                <button @click="changeDate(-1)" class="p-2 bg-white dark:bg-gray-800 rounded-xl shadow border font-bold hover:bg-gray-100 transition">◀ Jour Précédent</button>
-                                <button @click="changeDate(1)" class="p-2 bg-white dark:bg-gray-800 rounded-xl shadow border font-bold hover:bg-gray-100 transition">Jour Suivant ▶</button>
+                                <button @click="changeDate(-1)" class="p-2.5 bg-white dark:bg-gray-800 rounded-xl shadow border font-bold hover:bg-gray-100 transition text-xs">◀ Jour Précédent</button>
+                                <button @click="changeDate(1)" class="p-2.5 bg-white dark:bg-gray-800 rounded-xl shadow border font-bold hover:bg-gray-100 transition text-xs">Jour Suivant ▶</button>
                             </div>
-                            <input type="date" x-model="selectedDate" class="px-4 py-2 rounded-xl border dark:bg-gray-800 text-xs font-bold ring-2 ring-blue-500/50">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-bold text-gray-500 capitalize" x-text="formattedSelectedDate"></span>
+                                <input type="date" x-model="selectedDate" class="px-3 py-2 rounded-xl border dark:bg-gray-800 text-xs font-bold ring-2 ring-blue-500/50">
+                            </div>
                         </div>
 
-                        <!-- Liste dynamique des créneaux -->
-                        <div class="space-y-3 max-h-[550px] overflow-y-auto pr-2">
-                            <template x-for="slot in timeSlots" :key="slot.time">
-                                <div class="flex items-center justify-between p-3.5 rounded-2xl border transition" 
-                                     :class="slot.booked ? (slot.appointment.status === 'Terminé' ? 'bg-green-50/60 dark:bg-green-950/20 border-green-200' : 'bg-blue-50/70 dark:bg-blue-900/30 border-blue-200') : 'bg-gray-50 dark:bg-gray-700/30 hover:border-primary cursor-pointer'"
-                                     @click="!slot.booked && selectSlot(slot.time)">
-                                    
-                                    <div class="flex items-center space-x-4">
-                                        <div class="font-mono font-bold text-sm px-3 py-1.5 rounded-xl text-white shadow-sm" 
-                                             :class="slot.booked ? (slot.appointment.status === 'Terminé' ? 'bg-green-600' : 'bg-primary') : 'bg-gray-400'" 
-                                             x-text="slot.time"></div>
-                                        
-                                        <template x-if="slot.booked">
-                                            <div class="space-y-0.5">
-                                                <div class="flex items-center space-x-2">
-                                                    <p class="font-bold text-sm" x-text="slot.appointment.clientName + ' (' + slot.appointment.clientPhone + ')'"></p>
-                                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
-                                                          :class="slot.appointment.status === 'Terminé' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-700'"
-                                                          x-text="slot.appointment.status"></span>
-                                                </div>
-                                                <p class="text-xs text-gray-500" x-text="slot.appointment.serviceName + ' • ' + slot.appointment.price + ' €'"></p>
-                                            </div>
-                                        </template>
+                        <!-- Notification si Jour Fermé -->
+                        <template x-if="isDayClosed">
+                            <div class="p-6 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 text-amber-800 dark:text-amber-200 rounded-2xl text-center space-y-2">
+                                <span class="text-2xl">💤</span>
+                                <h4 class="font-bold text-base">Journée de Congé / Salon Fermé</h4>
+                                <p class="text-xs">Ce jour ne fait pas partie de vos jours de travail configurés. Vous pouvez naviguer vers d'autres dates avec les flèches.</p>
+                            </div>
+                        </template>
 
-                                        <template x-if="!slot.booked">
-                                            <div class="flex items-center space-x-2 text-gray-400 hover:text-primary transition">
-                                                <span class="text-xs font-semibold">⚡ Cliquer pour réserver ce créneau</span>
-                                            </div>
+                        <!-- Liste dynamique des créneaux si Jour Ouvert -->
+                        <template x-if="!isDayClosed">
+                            <div class="space-y-3 max-h-[550px] overflow-y-auto pr-2">
+                                <template x-for="slot in activeDaySlots" :key="slot.time">
+                                    <div class="flex items-center justify-between p-3.5 rounded-2xl border transition" 
+                                         :class="slot.booked ? (slot.appointment.status === 'Terminé' ? 'bg-green-50/60 dark:bg-green-950/20 border-green-200' : 'bg-blue-50/70 dark:bg-blue-900/30 border-blue-200') : 'bg-gray-50 dark:bg-gray-700/30 hover:border-primary cursor-pointer'"
+                                         @click="!slot.booked && selectSlot(slot.time)">
+                                        
+                                        <div class="flex items-center space-x-4">
+                                            <div class="font-mono font-bold text-sm px-3 py-1.5 rounded-xl text-white shadow-sm" 
+                                                 :class="slot.booked ? (slot.appointment.status === 'Terminé' ? 'bg-green-600' : 'bg-primary') : 'bg-gray-400'" 
+                                                 x-text="slot.time"></div>
+                                            
+                                            <template x-if="slot.booked">
+                                                <div class="space-y-0.5">
+                                                    <div class="flex items-center space-x-2">
+                                                        <p class="font-bold text-sm" x-text="slot.appointment.clientName + ' (' + slot.appointment.clientPhone + ')'"></p>
+                                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
+                                                              :class="slot.appointment.status === 'Terminé' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-700'"
+                                                              x-text="slot.appointment.status"></span>
+                                                    </div>
+                                                    <p class="text-xs text-gray-500" x-text="slot.appointment.serviceName + ' • ' + slot.appointment.price + ' €'"></p>
+                                                </div>
+                                            </template>
+
+                                            <template x-if="!slot.booked">
+                                                <div class="flex items-center space-x-2 text-gray-400 hover:text-primary transition">
+                                                    <span class="text-xs font-semibold">⚡ Créneau disponible - Cliquer pour réserver</span>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <!-- Bouton Terminer le RDV -->
+                                        <template x-if="slot.booked && slot.appointment.status !== 'Terminé'">
+                                            <button @click.stop="completeAppointment(slot)" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3 py-2 rounded-xl shadow transition">
+                                                ✓ Terminer le RDV
+                                            </button>
                                         </template>
                                     </div>
+                                </template>
+                            </div>
+                        </template>
 
-                                    <!-- Bouton Terminer le RDV -->
-                                    <template x-if="slot.booked && slot.appointment.status !== 'Terminé'">
-                                        <button @click.stop="completeAppointment(slot)" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3 py-2 rounded-xl shadow transition">
-                                            ✓ Terminer le RDV
-                                        </button>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
                     </div>
                 </div>
 
@@ -516,7 +531,7 @@
         <p><a href="https://theoagency.github.io/FADELY/" class="text-primary font-bold hover:underline">https://theoagency.github.io/FADELY/</a></p>
     </footer>
 
-    <!-- SCRIPT LOGIQUE APP -->
+    <!-- SCRIPT LOGIQUE APP DYNAMIQUE -->
     <script>
         function fadelyApp() {
             return {
@@ -547,6 +562,13 @@
                 selectedDate: new Date().toISOString().split('T')[0],
                 newAppt: { clientName: '', clientPhone: '', serviceIndex: 0, time: '09:00' },
                 
+                // Base de données des rendez-vous stockés par date "YYYY-MM-DD"
+                appointmentsDatabase: {
+                    [new Date().toISOString().split('T')[0]]: [
+                        { time: '10:00', clientName: 'Karim', clientPhone: '0600000000', serviceName: 'Dégradé Américain (Fade)', price: 30, status: 'Confirmé' }
+                    ]
+                },
+
                 // Statistiques de Chiffre d'Affaires
                 stats: {
                     dailyCA: 0,
@@ -554,57 +576,79 @@
                     completedCount: 62
                 },
 
-                // Heures de la journée
-                timeSlots: [
-                    { time: '09:00', booked: false, appointment: null },
-                    { time: '10:00', booked: true, appointment: { clientName: 'Karim', clientPhone: '0600000000', serviceName: 'Dégradé Américain (Fade)', price: 30, status: 'Confirmé' } },
-                    { time: '11:00', booked: false, appointment: null },
-                    { time: '12:00', booked: false, appointment: null },
-                    { time: '14:00', booked: false, appointment: null },
-                    { time: '15:00', booked: false, appointment: null },
-                    { time: '16:00', booked: false, appointment: null },
-                    { time: '17:00', booked: false, appointment: null }
-                ],
-
                 initAutoReminders() {},
                 initPWA() {},
+
+                // Format du jour sélectionné (ex: "Lundi 10 Novembre 2026")
+                get formattedSelectedDate() {
+                    if (!this.selectedDate) return '';
+                    const d = new Date(this.selectedDate + 'T00:00:00');
+                    return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                },
+
+                // Vérifie si le jour sélectionné est fermé dans la configuration du salon
+                get isDayClosed() {
+                    if (!this.selectedDate) return false;
+                    const d = new Date(this.selectedDate + 'T00:00:00');
+                    const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+                    const dayName = dayNames[d.getDay()];
+                    return !this.salon.workDays.includes(dayName);
+                },
+
+                // Génère dynamiquement les créneaux horaires pour n'importe quelle date
+                get activeDaySlots() {
+                    const baseTimes = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+                    const dayAppts = this.appointmentsDatabase[this.selectedDate] || [];
+
+                    return baseTimes.map(time => {
+                        const appt = dayAppts.find(a => a.time === time);
+                        return {
+                            time: time,
+                            booked: !!appt,
+                            appointment: appt || null
+                        };
+                    });
+                },
                 
+                // Changement de date via les flèches
                 changeDate(days) {
-                    let d = new Date(this.selectedDate);
+                    let d = new Date(this.selectedDate + 'T00:00:00');
                     d.setDate(d.getDate() + days);
                     this.selectedDate = d.toISOString().split('T')[0];
                 },
 
-                // Réservation rapide au clic sur un créneau disponible
+                // Sélection au clic sur un créneau disponible
                 selectSlot(time) {
                     this.newAppt.time = time;
                     document.getElementById('booking-form-box').scrollIntoView({ behavior: 'smooth' });
                 },
 
-                // Ajouter manuellement un rendez-vous
+                // Ajouter un RDV sur la date sélectionnée
                 addManualAppointment() {
-                    if(!this.newAppt.clientName) return;
+                    if (!this.newAppt.clientName) return;
                     
                     const selectedService = this.salon.services[this.newAppt.serviceIndex];
-                    const slotIndex = this.timeSlots.findIndex(s => s.time === this.newAppt.time);
                     
-                    if (slotIndex !== -1) {
-                        this.timeSlots[slotIndex].booked = true;
-                        this.timeSlots[slotIndex].appointment = {
-                            clientName: this.newAppt.clientName,
-                            clientPhone: this.newAppt.clientPhone,
-                            serviceName: selectedService.name,
-                            price: parseFloat(selectedService.price),
-                            status: 'Confirmé'
-                        };
+                    if (!this.appointmentsDatabase[this.selectedDate]) {
+                        this.appointmentsDatabase[this.selectedDate] = [];
                     }
+
+                    // Ajout du rendez-vous dans le stockage par date
+                    this.appointmentsDatabase[this.selectedDate].push({
+                        time: this.newAppt.time,
+                        clientName: this.newAppt.clientName,
+                        clientPhone: this.newAppt.clientPhone,
+                        serviceName: selectedService.name,
+                        price: parseFloat(selectedService.price),
+                        status: 'Confirmé'
+                    });
 
                     // Réinitialisation du formulaire
                     this.newAppt.clientName = '';
                     this.newAppt.clientPhone = '';
                 },
 
-                // Marquer un RDV comme Terminé et ajouter au CA
+                // Marquer le RDV de la date actuelle comme Terminé
                 completeAppointment(slot) {
                     if (slot.appointment) {
                         slot.appointment.status = 'Terminé';
