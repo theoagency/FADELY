@@ -559,7 +559,6 @@
                 selectedDate: new Date().toISOString().split('T')[0],
                 newAppt: { clientName: '', clientPhone: '', serviceIndex: 0, time: '09:00' },
                 
-                // Base de données des rendez-vous vide par défaut
                 appointmentsDatabase: {},
 
                 stats: {
@@ -579,13 +578,15 @@
 
                 get isDayClosed() {
                     if (!this.selectedDate) return false;
-                    // Vérifie si la date est dans les congés
                     if (this.salon.holidays && this.salon.holidays.includes(this.selectedDate)) return true;
-                    // Vérifie si le jour de la semaine est travaillé
                     const d = new Date(this.selectedDate + 'T00:00:00');
                     const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
                     const dayName = dayNames[d.getDay()];
-                    return !this.salon.workDays.includes(dayName);
+                    return !this.workDaysCheck(dayName);
+                },
+
+                workDaysCheck(dayName) {
+                    return this.salon.workDays.includes(dayName);
                 },
 
                 get activeDaySlots() {
@@ -599,7 +600,6 @@
                         for (let m = 0; m < 60; m += interval) {
                             let timeStr = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
                             
-                            // Exclusion de la pause midi
                             if (this.salon.lunchStart && this.salon.lunchEnd) {
                                 if (timeStr >= this.salon.lunchStart && timeStr < this.salon.lunchEnd) {
                                     continue;
