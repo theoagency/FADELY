@@ -47,7 +47,6 @@
                 <span class="text-2xl font-black tracking-tight text-primary dark:text-blue-400" x-text="salon.name || 'FADELY'">FADELY</span>
             </div>
             <div class="flex items-center space-x-4">
-                <!-- Sélecteur de langue -->
                 <select x-model="selectedLang" class="bg-gray-100 dark:bg-gray-700 text-xs font-bold px-3 py-2 rounded-xl border-0 cursor-pointer hover:bg-gray-200 transition">
                     <option value="fr">🇫🇷 FR</option>
                     <option value="en">🇬🇧 EN</option>
@@ -175,32 +174,32 @@
             </div>
         </template>
 
-        <!-- 2. INSCRIPTION & CONFIGURATION AVANCÉE -->
+        <!-- 2. INSCRIPTION & CONFIGURATION COMPLÈTE -->
         <template x-if="currentView === 'register'">
             <div class="max-w-2xl mx-auto px-4 py-12">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl border space-y-8">
                     <div class="text-center space-y-2">
-                        <span class="bg-blue-100 dark:bg-blue-900/50 text-primary text-xs font-bold px-3 py-1 rounded-full">Assistant de Configuration Professionnelle</span>
-                        <h2 class="text-3xl font-black">Configurez votre salon FADELY</h2>
-                        <p class="text-xs text-gray-500">Abonnement professionnel à 49,99 €/mois. Résiliable à tout moment.</p>
+                        <span class="bg-blue-100 dark:bg-blue-900/50 text-primary text-xs font-bold px-3 py-1 rounded-full">Configuration Professionnelle Sur-Mesure</span>
+                        <h2 class="text-3xl font-black">Paramétrez votre salon FADELY</h2>
+                        <p class="text-xs text-gray-500">Abonnement pro à 49,99 €/mois. Tout est personnalisable.</p>
                     </div>
 
                     <form @submit.prevent="finishRegistration()" class="space-y-6 text-xs">
                         <!-- 1. Infos Générales -->
                         <div class="p-5 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border space-y-4">
-                            <h3 class="font-bold text-sm text-primary uppercase">1. Vos Informations & Téléphone</h3>
+                            <h3 class="font-bold text-sm text-primary uppercase">1. Vos Informations</h3>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block font-bold mb-1">Prénom :</label>
-                                    <input type="text" x-model="salon.firstName" placeholder="Thomas" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
+                                    <input type="text" x-model="salon.firstName" placeholder="" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
                                 </div>
                                 <div>
                                     <label class="block font-bold mb-1">Nom :</label>
-                                    <input type="text" x-model="salon.lastName" placeholder="Barber" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
+                                    <input type="text" x-model="salon.lastName" placeholder="" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
                                 </div>
                             </div>
                             <div>
-                                <label class="block font-bold mb-1">Numéro de téléphone pro :</label>
+                                <label class="block font-bold mb-1">Téléphone pro :</label>
                                 <div class="flex space-x-2">
                                     <select x-model="salon.countryCode" class="w-36 px-2 py-2 rounded-xl border dark:bg-gray-800 font-bold text-primary">
                                         <option value="+32">🇧🇪 +32</option>
@@ -211,62 +210,41 @@
                                         <option value="+44">🇬🇧 +44</option>
                                         <option value="+212">🇲🇦 +212</option>
                                     </select>
-                                    <input type="tel" x-model="salon.phone" placeholder="470123456" required class="flex-grow px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
+                                    <input type="tel" x-model="salon.phone" placeholder="" required class="flex-grow px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
                                 </div>
                             </div>
                             <div>
                                 <label class="block font-bold mb-1">Nom de votre Salon :</label>
-                                <input type="text" x-model="salon.name" placeholder="Fade Master Studio" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
+                                <input type="text" x-model="salon.name" placeholder="" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block font-bold mb-1">Email pro :</label>
-                                    <input type="email" x-model="salon.email" placeholder="coiffeur@gmail.com" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
+                                    <input type="email" x-model="salon.email" placeholder="" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
                                 </div>
                                 <div>
                                     <label class="block font-bold mb-1">Mot de passe :</label>
-                                    <input type="password" x-model="salon.password" placeholder="••••••••" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
+                                    <input type="password" x-model="salon.password" placeholder="" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 2. Horaires & Pause midi -->
+                        <!-- 2. Horaires, Jours, Pauses & Intervalles -->
                         <div class="p-5 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border space-y-4">
-                            <h3 class="font-bold text-sm text-primary uppercase">2. Horaires & Jours de Travail</h3>
+                            <h3 class="font-bold text-sm text-primary uppercase">2. Horaires & Jours d'Ouverture</h3>
                             <div>
-                                <label class="block font-bold mb-2">Jours travaillés :</label>
+                                <label class="block font-bold mb-2">Jours travaillés dans la semaine :</label>
                                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                    <label class="flex items-center space-x-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border cursor-pointer">
-                                        <input type="checkbox" value="Lundi" x-model="salon.workDays" class="rounded text-primary">
-                                        <span>Lundi</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border cursor-pointer">
-                                        <input type="checkbox" value="Mardi" x-model="salon.workDays" class="rounded text-primary">
-                                        <span>Mardi</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border cursor-pointer">
-                                        <input type="checkbox" value="Mercredi" x-model="salon.workDays" class="rounded text-primary">
-                                        <span>Mercredi</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border cursor-pointer">
-                                        <input type="checkbox" value="Jeudi" x-model="salon.workDays" class="rounded text-primary">
-                                        <span>Jeudi</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border cursor-pointer">
-                                        <input type="checkbox" value="Vendredi" x-model="salon.workDays" class="rounded text-primary">
-                                        <span>Vendredi</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border cursor-pointer">
-                                        <input type="checkbox" value="Samedi" x-model="salon.workDays" class="rounded text-primary">
-                                        <span>Samedi</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border cursor-pointer">
-                                        <input type="checkbox" value="Dimanche" x-model="salon.workDays" class="rounded text-primary">
-                                        <span>Dimanche</span>
-                                    </label>
+                                    <template x-for="day in ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']">
+                                        <label class="flex items-center space-x-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border cursor-pointer">
+                                            <input type="checkbox" :value="day" x-model="salon.workDays" class="rounded text-primary">
+                                            <span x-text="day"></span>
+                                        </label>
+                                    </template>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-4 pt-2">
+
+                            <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block font-bold mb-1">Début Pause Midi :</label>
                                     <input type="time" x-model="salon.lunchStart" class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
@@ -276,24 +254,48 @@
                                     <input type="time" x-model="salon.lunchEnd" class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm">
                                 </div>
                             </div>
+
+                            <div>
+                                <label class="block font-bold mb-1">Durée / Intervalle entre les RDV :</label>
+                                <select x-model="salon.slotInterval" class="w-full px-3 py-2 rounded-xl border dark:bg-gray-800 text-sm font-semibold text-primary">
+                                    <option value="10">10 minutes</option>
+                                    <option value="15">15 minutes</option>
+                                    <option value="20">20 minutes</option>
+                                    <option value="30">30 minutes</option>
+                                    <option value="60">1 heure</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block font-bold mb-1">Jours de congés / fermetures exceptionnelles (Dates) :</label>
+                                <div class="space-y-2">
+                                    <template x-for="(holiday, index) in salon.holidays" :key="index">
+                                        <div class="flex space-x-2 items-center">
+                                            <input type="date" x-model="salon.holidays[index]" class="flex-grow px-3 py-2 rounded-xl border dark:bg-gray-800 text-xs">
+                                            <button type="button" @click="salon.holidays.splice(index, 1)" class="text-red-500 font-bold px-2 py-1 hover:bg-red-50 rounded-lg">✕</button>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button type="button" @click="salon.holidays.push('')" class="mt-2 text-xs bg-blue-100 text-primary font-bold px-3 py-2 rounded-xl hover:bg-blue-200 transition">+ Ajouter un jour de congé</button>
+                            </div>
                         </div>
 
-                        <!-- 3. Prestations -->
+                        <!-- 3. Prestations Vides -->
                         <div class="p-5 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border space-y-4">
                             <h3 class="font-bold text-sm text-primary uppercase">3. Prestations & Tarifs</h3>
                             <div class="space-y-2">
                                 <template x-for="(srv, index) in salon.services" :key="index">
                                     <div class="flex space-x-2 items-center">
-                                        <input type="text" x-model="srv.name" placeholder="Nom de la prestation" class="flex-grow px-3 py-2 rounded-xl border dark:bg-gray-800 text-xs">
+                                        <input type="text" x-model="srv.name" placeholder="Nom de la prestation (ex: Coupe, Barbe...)" class="flex-grow px-3 py-2 rounded-xl border dark:bg-gray-800 text-xs">
                                         <input type="number" x-model="srv.price" placeholder="Prix (€)" class="w-24 px-3 py-2 rounded-xl border dark:bg-gray-800 text-xs">
                                         <button type="button" @click="salon.services.splice(index, 1)" class="text-red-500 font-bold px-2 py-1 hover:bg-red-50 rounded-lg">✕</button>
                                     </div>
                                 </template>
                             </div>
-                            <button type="button" @click="salon.services.push({ name: '', price: 25 })" class="text-xs bg-blue-100 text-primary font-bold px-3 py-2 rounded-xl hover:bg-blue-200 transition">+ Ajouter une prestation</button>
+                            <button type="button" @click="salon.services.push({ name: '', price: '' })" class="text-xs bg-blue-100 text-primary font-bold px-3 py-2 rounded-xl hover:bg-blue-200 transition">+ Ajouter une prestation</button>
                         </div>
 
-                        <!-- SECTION PAIEMENT SÉCURISÉ STRIPE -->
+                        <!-- SECTION PAIEMENT STRIPE -->
                         <div class="p-5 bg-blue-50/50 dark:bg-gray-700/40 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-4">
                             <h3 class="font-bold text-sm text-primary uppercase flex items-center justify-between">
                                 <span>💳 4. Paiement Sécurisé (Stripe)</span>
@@ -325,7 +327,7 @@
             </div>
         </template>
 
-        <!-- 3. DASHBOARD INDÉPENDANT PRO -->
+        <!-- 3. DASHBOARD -->
         <template x-if="currentView === 'dashboard'">
             <div class="max-w-7xl mx-auto px-4 py-8 space-y-8">
                 <!-- En-tête -->
@@ -340,7 +342,7 @@
                     </div>
                 </div>
 
-                <!-- 🗂️ ONGLETS -->
+                <!-- ONGLETS -->
                 <div class="hidden sm:flex space-x-2 border-b dark:border-gray-700 pb-2 overflow-x-auto">
                     <button @click="dashboardTab = 'agenda'" class="px-5 py-2.5 rounded-xl font-bold text-sm transition" :class="dashboardTab === 'agenda' ? 'bg-primary text-white shadow' : 'bg-gray-100 dark:bg-gray-800 text-gray-600'">📅 Mon Agenda</button>
                     <button @click="dashboardTab = 'stats'" class="px-5 py-2.5 rounded-xl font-bold text-sm transition" :class="dashboardTab === 'stats' ? 'bg-primary text-white shadow' : 'bg-gray-100 dark:bg-gray-800 text-gray-600'">📈 Statistiques CA</button>
@@ -358,11 +360,11 @@
                         <form @submit.prevent="addManualAppointment()" class="space-y-3">
                             <div>
                                 <label class="block text-xs font-semibold mb-1">Nom du client :</label>
-                                <input type="text" x-model="newAppt.clientName" placeholder="Karim" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-700 text-sm">
+                                <input type="text" x-model="newAppt.clientName" placeholder="" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-700 text-sm">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold mb-1">Téléphone :</label>
-                                <input type="tel" x-model="newAppt.clientPhone" placeholder="0600000000" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-700 text-sm">
+                                <input type="tel" x-model="newAppt.clientPhone" placeholder="" required class="w-full px-3 py-2 rounded-xl border dark:bg-gray-700 text-sm">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold mb-1">Prestation :</label>
@@ -388,7 +390,7 @@
                         </form>
                     </div>
 
-                    <!-- Liste des créneaux horaires selon la date -->
+                    <!-- Liste des créneaux horaires -->
                     <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow border space-y-6">
                         <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl gap-4">
                             <div class="flex items-center space-x-3">
@@ -401,16 +403,16 @@
                             </div>
                         </div>
 
-                        <!-- Notification si Jour Fermé -->
+                        <!-- Notification si Jour Fermé ou Congé -->
                         <template x-if="isDayClosed">
                             <div class="p-6 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 text-amber-800 dark:text-amber-200 rounded-2xl text-center space-y-2">
                                 <span class="text-2xl">💤</span>
-                                <h4 class="font-bold text-base">Journée de Congé / Salon Fermé</h4>
-                                <p class="text-xs">Ce jour ne fait pas partie de vos jours de travail configurés. Vous pouvez naviguer vers d'autres dates avec les flèches.</p>
+                                <h4 class="font-bold text-base">Salon Fermé ou Jour de Congé</h4>
+                                <p class="text-xs">Cette date correspond à un jour de repos configuré ou un congé prédéfini. Changez de date pour voir le planning.</p>
                             </div>
                         </template>
 
-                        <!-- Liste dynamique des créneaux si Jour Ouvert -->
+                        <!-- Liste dynamique des créneaux -->
                         <template x-if="!isDayClosed">
                             <div class="space-y-3 max-h-[550px] overflow-y-auto pr-2">
                                 <template x-for="slot in activeDaySlots" :key="slot.time">
@@ -442,7 +444,6 @@
                                             </template>
                                         </div>
 
-                                        <!-- Bouton Terminer le RDV -->
                                         <template x-if="slot.booked && slot.appointment.status !== 'Terminé'">
                                             <button @click.stop="completeAppointment(slot)" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3 py-2 rounded-xl shadow transition">
                                                 ✓ Terminer le RDV
@@ -452,7 +453,6 @@
                                 </template>
                             </div>
                         </template>
-
                     </div>
                 </div>
 
@@ -531,7 +531,7 @@
         <p><a href="https://theoagency.github.io/FADELY/" class="text-primary font-bold hover:underline">https://theoagency.github.io/FADELY/</a></p>
     </footer>
 
-    <!-- SCRIPT LOGIQUE APP DYNAMIQUE -->
+    <!-- SCRIPT LOGIQUE APP -->
     <script>
         function fadelyApp() {
             return {
@@ -541,91 +541,97 @@
                 selectedLang: 'fr',
                 loginError: '',
                 salon: {
-                    name: localStorage.getItem('fadely_name') || 'Fade Master Studio',
-                    firstName: localStorage.getItem('fadely_firstname') || 'Thomas',
-                    lastName: localStorage.getItem('fadely_lastname') || 'Barber',
-                    phone: localStorage.getItem('fadely_phone') || '470123456',
+                    name: localStorage.getItem('fadely_name') || '',
+                    firstName: localStorage.getItem('fadely_firstname') || '',
+                    lastName: localStorage.getItem('fadely_lastname') || '',
+                    phone: localStorage.getItem('fadely_phone') || '',
                     countryCode: localStorage.getItem('fadely_cc') || '+32',
-                    email: localStorage.getItem('fadely_email') || 'coiffeur@gmail.com',
-                    password: localStorage.getItem('fadely_password') || 'password123',
+                    email: localStorage.getItem('fadely_email') || '',
+                    password: localStorage.getItem('fadely_password') || '',
                     workDays: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
                     lunchStart: '13:00',
                     lunchEnd: '14:00',
-                    services: [
-                        { name: 'Coupe Classique', price: 25 },
-                        { name: 'Dégradé Américain (Fade)', price: 30 },
-                        { name: 'Barbe & Soins', price: 20 },
-                        { name: 'Combo Coupe + Barbe', price: 45 }
-                    ]
+                    slotInterval: '30',
+                    holidays: [],
+                    services: []
                 },
                 loginData: { email: '', password: '' },
                 selectedDate: new Date().toISOString().split('T')[0],
                 newAppt: { clientName: '', clientPhone: '', serviceIndex: 0, time: '09:00' },
                 
-                // Base de données des rendez-vous stockés par date "YYYY-MM-DD"
-                appointmentsDatabase: {
-                    [new Date().toISOString().split('T')[0]]: [
-                        { time: '10:00', clientName: 'Karim', clientPhone: '0600000000', serviceName: 'Dégradé Américain (Fade)', price: 30, status: 'Confirmé' }
-                    ]
-                },
+                // Base de données des rendez-vous vide par défaut
+                appointmentsDatabase: {},
 
-                // Statistiques de Chiffre d'Affaires
                 stats: {
                     dailyCA: 0,
-                    monthlyCA: 1840,
-                    completedCount: 62
+                    monthlyCA: 0,
+                    completedCount: 0
                 },
 
                 initAutoReminders() {},
                 initPWA() {},
 
-                // Format du jour sélectionné (ex: "Lundi 10 Novembre 2026")
                 get formattedSelectedDate() {
                     if (!this.selectedDate) return '';
                     const d = new Date(this.selectedDate + 'T00:00:00');
                     return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
                 },
 
-                // Vérifie si le jour sélectionné est fermé dans la configuration du salon
                 get isDayClosed() {
                     if (!this.selectedDate) return false;
+                    // Vérifie si la date est dans les congés
+                    if (this.salon.holidays && this.salon.holidays.includes(this.selectedDate)) return true;
+                    // Vérifie si le jour de la semaine est travaillé
                     const d = new Date(this.selectedDate + 'T00:00:00');
                     const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
                     const dayName = dayNames[d.getDay()];
                     return !this.salon.workDays.includes(dayName);
                 },
 
-                // Génère dynamiquement les créneaux horaires pour n'importe quelle date
                 get activeDaySlots() {
-                    const baseTimes = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-                    const dayAppts = this.appointmentsDatabase[this.selectedDate] || [];
+                    let slots = [];
+                    let interval = parseInt(this.salon.slotInterval) || 30;
+                    
+                    let startHour = 9;
+                    let endHour = 19;
 
-                    return baseTimes.map(time => {
-                        const appt = dayAppts.find(a => a.time === time);
-                        return {
-                            time: time,
-                            booked: !!appt,
-                            appointment: appt || null
-                        };
-                    });
+                    for (let h = startHour; h < endHour; h++) {
+                        for (let m = 0; m < 60; m += interval) {
+                            let timeStr = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+                            
+                            // Exclusion de la pause midi
+                            if (this.salon.lunchStart && this.salon.lunchEnd) {
+                                if (timeStr >= this.salon.lunchStart && timeStr < this.salon.lunchEnd) {
+                                    continue;
+                                }
+                            }
+
+                            const dayAppts = this.appointmentsDatabase[this.selectedDate] || [];
+                            const appt = dayAppts.find(a => a.time === timeStr);
+
+                            slots.push({
+                                time: timeStr,
+                                booked: !!appt,
+                                appointment: appt || null
+                            });
+                        }
+                    }
+                    return slots;
                 },
                 
-                // Changement de date via les flèches
                 changeDate(days) {
                     let d = new Date(this.selectedDate + 'T00:00:00');
                     d.setDate(d.getDate() + days);
                     this.selectedDate = d.toISOString().split('T')[0];
                 },
 
-                // Sélection au clic sur un créneau disponible
                 selectSlot(time) {
                     this.newAppt.time = time;
                     document.getElementById('booking-form-box').scrollIntoView({ behavior: 'smooth' });
                 },
 
-                // Ajouter un RDV sur la date sélectionnée
                 addManualAppointment() {
-                    if (!this.newAppt.clientName) return;
+                    if (!this.newAppt.clientName || this.salon.services.length === 0) return;
                     
                     const selectedService = this.salon.services[this.newAppt.serviceIndex];
                     
@@ -633,22 +639,19 @@
                         this.appointmentsDatabase[this.selectedDate] = [];
                     }
 
-                    // Ajout du rendez-vous dans le stockage par date
                     this.appointmentsDatabase[this.selectedDate].push({
                         time: this.newAppt.time,
                         clientName: this.newAppt.clientName,
                         clientPhone: this.newAppt.clientPhone,
                         serviceName: selectedService.name,
-                        price: parseFloat(selectedService.price),
+                        price: parseFloat(selectedService.price) || 0,
                         status: 'Confirmé'
                     });
 
-                    // Réinitialisation du formulaire
                     this.newAppt.clientName = '';
                     this.newAppt.clientPhone = '';
                 },
 
-                // Marquer le RDV de la date actuelle comme Terminé
                 completeAppointment(slot) {
                     if (slot.appointment) {
                         slot.appointment.status = 'Terminé';
@@ -661,17 +664,13 @@
 
                 loginCoiffeur() {
                     this.loginError = '';
-                    if (this.loginData.email && this.loginData.password && this.loginData.password.length >= 3) {
-                        if (localStorage.getItem('fadely_email')) {
-                            this.salon.name = localStorage.getItem('fadely_name') || this.salon.name;
-                            this.salon.firstName = localStorage.getItem('fadely_firstname') || this.salon.firstName;
-                            this.salon.lastName = localStorage.getItem('fadely_lastname') || this.salon.lastName;
-                        }
+                    if (this.loginData.email && this.loginData.password) {
                         this.currentView = 'dashboard';
                     } else {
-                        this.loginError = "❌ Veuillez entrer un email valide et un mot de passe correct.";
+                        this.loginError = "❌ Veuillez entrer un email et un mot de passe valides.";
                     }
                 },
+
                 finishRegistration() {
                     if(!this.salon.email || !this.salon.password) return;
                     localStorage.setItem('fadely_name', this.salon.name);
@@ -681,10 +680,9 @@
                     localStorage.setItem('fadely_cc', this.salon.countryCode);
                     localStorage.setItem('fadely_email', this.salon.email);
                     localStorage.setItem('fadely_password', this.salon.password);
-                    localStorage.setItem('fadely_lunchStart', this.salon.lunchStart);
-                    localStorage.setItem('fadely_lunchEnd', this.salon.lunchEnd);
                     this.currentView = 'dashboard';
                 },
+
                 logout() {
                     this.loginData = { email: '', password: '' };
                     this.loginError = '';
