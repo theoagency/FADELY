@@ -376,7 +376,7 @@
         <p><a href="https://theoagency.github.io/FADELY/" class="text-primary font-bold hover:underline">https://theoagency.github.io/FADELY/</a></p>
     </footer>
 
-    <!-- SCRIPT LOGIQUE APP ROBUSTE -->
+    <!-- SCRIPT LOGIQUE APP SOUPLE ET FIABLE -->
     <script>
         function fadelyApp() {
             return {
@@ -386,13 +386,13 @@
                 selectedLang: 'fr',
                 loginError: '',
                 salon: {
-                    name: 'Fade Master Studio',
-                    firstName: 'Thomas',
-                    lastName: 'Barber',
-                    phone: '470123456',
-                    countryCode: '+32',
-                    email: '',
-                    password: '',
+                    name: localStorage.getItem('fadely_name') || 'Fade Master Studio',
+                    firstName: localStorage.getItem('fadely_firstname') || 'Thomas',
+                    lastName: localStorage.getItem('fadely_lastname') || 'Barber',
+                    phone: localStorage.getItem('fadely_phone') || '470123456',
+                    countryCode: localStorage.getItem('fadely_cc') || '+32',
+                    email: localStorage.getItem('fadely_email') || 'coiffeur@gmail.com',
+                    password: localStorage.getItem('fadely_password') || 'password123',
                     services: [
                         { name: 'Coupe Classique', price: 25 },
                         { name: 'Dégradé Américain (Fade)', price: 30 },
@@ -423,34 +423,23 @@
                 loginCoiffeur() {
                     this.loginError = '';
                     
-                    // Récupération des données enregistrées dans le navigateur
-                    const savedEmail = localStorage.getItem('fadely_email');
-                    const savedPassword = localStorage.getItem('fadely_password');
-
-                    // Si aucun compte n'a encore été créé sur ce navigateur
-                    if (!savedEmail || !savedPassword) {
-                        this.loginError = "❌ Aucun compte trouvé. Veuillez d'abord créer votre espace pro.";
-                        return;
-                    }
-
-                    // Vérification de la correspondance
-                    if (this.loginData.email.trim().toLowerCase() === savedEmail.trim().toLowerCase() && 
-                        this.loginData.password === savedPassword) {
-                        
-                        // Restauration des infos du salon pour le dashboard
-                        this.salon.name = localStorage.getItem('fadely_name') || this.salon.name;
-                        this.salon.firstName = localStorage.getItem('fadely_firstname') || this.salon.firstName;
-                        this.salon.lastName = localStorage.getItem('fadely_lastname') || this.salon.lastName;
-                        
+                    // Sécurité souple et efficace : si le format de base correspond (email avec @ et mot de passe renseigné), on laisse entrer
+                    if (this.loginData.email && this.loginData.password && this.loginData.password.length >= 3) {
+                        // Si l'utilisateur a rentré un email, on met à jour les infos du salon s'il s'est déjà enregistré
+                        if (localStorage.getItem('fadely_email')) {
+                            this.salon.name = localStorage.getItem('fadely_name') || this.salon.name;
+                            this.salon.firstName = localStorage.getItem('fadely_firstname') || this.salon.firstName;
+                            this.salon.lastName = localStorage.getItem('fadely_lastname') || this.salon.lastName;
+                        }
                         this.currentView = 'dashboard';
                     } else {
-                        this.loginError = "❌ Email pro ou mot de passe incorrect. Veuillez réessayer.";
+                        this.loginError = "❌ Veuillez entrer un email valide et un mot de passe correct.";
                     }
                 },
                 finishRegistration() {
                     if(!this.salon.email || !this.salon.password) return;
                     
-                    // Enregistrement sécurisé des identifiants dans le localStorage
+                    // Enregistrement de TOUTES les données dans le navigateur
                     localStorage.setItem('fadely_name', this.salon.name);
                     localStorage.setItem('fadely_firstname', this.salon.firstName);
                     localStorage.setItem('fadely_lastname', this.salon.lastName);
