@@ -376,7 +376,7 @@
         <p><a href="https://theoagency.github.io/FADELY/" class="text-primary font-bold hover:underline">https://theoagency.github.io/FADELY/</a></p>
     </footer>
 
-    <!-- SCRIPT LOGIQUE APP SÉCURISÉ -->
+    <!-- SCRIPT LOGIQUE APP PERSISTANT -->
     <script>
         function fadelyApp() {
             return {
@@ -386,13 +386,13 @@
                 selectedLang: 'fr',
                 loginError: '',
                 salon: {
-                    name: 'Fade Master Studio',
-                    firstName: 'Thomas',
-                    lastName: 'Barber',
-                    phone: '470123456',
-                    countryCode: '+32',
-                    email: 'coiffeur@gmail.com',
-                    password: 'password123', // Mot de passe par défaut sécurisé
+                    name: localStorage.getItem('fadely_name') || 'Fade Master Studio',
+                    firstName: localStorage.getItem('fadely_firstname') || 'Thomas',
+                    lastName: localStorage.getItem('fadely_lastname') || 'Barber',
+                    phone: localStorage.getItem('fadely_phone') || '470123456',
+                    countryCode: localStorage.getItem('fadely_cc') || '+32',
+                    email: localStorage.getItem('fadely_email') || 'coiffeur@gmail.com',
+                    password: localStorage.getItem('fadely_password') || 'password123',
                     services: [
                         { name: 'Coupe Classique', price: 25 },
                         { name: 'Dégradé Américain (Fade)', price: 30 },
@@ -422,7 +422,6 @@
                 },
                 loginCoiffeur() {
                     this.loginError = '';
-                    // Vérification stricte des identifiants
                     if (this.loginData.email.trim().toLowerCase() === this.salon.email.trim().toLowerCase() && 
                         this.loginData.password === this.salon.password) {
                         this.currentView = 'dashboard';
@@ -432,7 +431,15 @@
                 },
                 finishRegistration() {
                     if(!this.salon.email || !this.salon.password) return;
-                    // Sauvegarde des nouveaux identifiants saisis lors de l'inscription
+                    // Sauvegarde définitive dans la mémoire du navigateur (localStorage)
+                    localStorage.setItem('fadely_name', this.salon.name);
+                    localStorage.setItem('fadely_firstname', this.salon.firstName);
+                    localStorage.setItem('fadely_lastname', this.salon.lastName);
+                    localStorage.setItem('fadely_phone', this.salon.phone);
+                    localStorage.setItem('fadely_cc', this.salon.countryCode);
+                    localStorage.setItem('fadely_email', this.salon.email);
+                    localStorage.setItem('fadely_password', this.salon.password);
+                    
                     this.currentView = 'dashboard';
                 },
                 logout() {
